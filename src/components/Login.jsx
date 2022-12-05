@@ -10,13 +10,15 @@ import {
   Row,
 } from "react-bootstrap";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordRef = useRef();
 const [isLogin,setIsLogin]= useState(false)  
-  const formSubmitHandler = (e) => {
+const history = useHistory()  
+const formSubmitHandler = (e) => {
     e.preventDefault();
   let url;
   if(isLogin){
@@ -28,10 +30,14 @@ const [isLogin,setIsLogin]= useState(false)
   
     const email= emailInputRef.current.value
   const password= passwordInputRef.current.value
-  const confirmPassword = confirmPasswordRef.current.value
+   
+   
+  if(!isLogin){
+    const confirmPassword = confirmPasswordRef.current.value
     if(password!==confirmPassword){
-        alert('Password did not match')
-    }
+      alert('Password did not match')
+  }
+  }
 axios.post(url,{
     email:email,
     password:password,
@@ -42,6 +48,7 @@ axios.post(url,{
         const token = response.data.idToken
         localStorage.setItem('token',token)
         console.log('User has successfully signed up');
+        history.replace('/welcome')
         console.log(response);
     }
 })
@@ -89,7 +96,7 @@ axios.post(url,{
                       />
                     </FloatingLabel>
                   </Form.Group>
-                  <Form.Group className="mb-3" aria-setsize={5}>
+                  {!isLogin && <Form.Group className="mb-3" aria-setsize={5}>
                     <FloatingLabel label="Confirm Password" className="mb-3">
                       <Form.Control
                         ref={confirmPasswordRef}
@@ -97,11 +104,12 @@ axios.post(url,{
                         placeholder="Confirm Password"
                       />
                     </FloatingLabel>
-                  </Form.Group>
+                  </Form.Group>}
                   <Form.Group>
                     <div className="d-grid gap-1">
                       <Button type="submit">{isLogin?'Login':'Signup'} </Button>
                     </div>
+                    {isLogin &&<p className="forgot">Forgot Password</p>}
                   </Form.Group>
                 </Form>
               </Card.Body>
