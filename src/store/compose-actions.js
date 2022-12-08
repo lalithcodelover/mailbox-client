@@ -9,7 +9,7 @@ export const composeMail = (mail, message) => {
     const sent = await axios.post(
       `https://mailbox-client-0574-default-rtdb.firebaseio.com/${short}.json`,
       {
-        sent: { To: mail, message ,read:false},
+        sent: { To: mail, message, read: false },
       }
     );
     if (sent.status === 200) {
@@ -25,35 +25,33 @@ export const composeMail = (mail, message) => {
     await axios.post(
       `https://mailbox-client-0574-default-rtdb.firebaseio.com/${shorts}.json`,
       {
-        inbox: { From: email, message ,read:false},
+        inbox: { From: email, message, read: false },
       }
     );
   };
 };
 
-export const readMessage=(data)=>{
-  return async(dispatch)=>{
-    const readingData=async()=>{
-      
-    const email = localStorage.getItem("email");
-    const short = email.replace(/[^a-zA-Z0-9]/g, "");
+export const readMessage = (data) => {
+  return async (dispatch) => {
+    const readingData = async () => {
+      const email = localStorage.getItem("email");
+      const short = email.replace(/[^a-zA-Z0-9]/g, "");
       const sent = await axios.put(
         `https://mailbox-client-0574-default-rtdb.firebaseio.com/${short}/${data.id}/inbox.json`,
         {
-          From:data.From,
-          message:data.message,
-          read:true
+          From: data.From,
+          message: data.message,
+          read: true,
         }
       );
-      if(sent.status===200){
+      if (sent.status === 200) {
         console.log(sent.data);
-        dispatch(composeActions.onRead(data.id))
+        dispatch(composeActions.onRead(data.id));
       }
-        
-    }
-    readingData()
-  }
-}
+    };
+    readingData();
+  };
+};
 
 export const fetchSentMail = () => {
   return async (dispatch) => {
@@ -68,10 +66,10 @@ export const fetchSentMail = () => {
       for (const key in response.data) {
         if (response.data[key].sent) {
           data.push({
-            id:key,
+            id: key,
             To: response.data[key].sent.To,
             message: response.data[key].sent.message,
-            read:response.data[key].sent.read
+            read: response.data[key].sent.read,
           });
         }
       }
@@ -96,10 +94,10 @@ export const fetchRecievedMail = () => {
       for (const key in response.data) {
         if (response.data[key].inbox) {
           data.push({
-            id:key,
+            id: key,
             From: response.data[key].inbox.From,
             message: response.data[key].inbox.message,
-            read:response.data[key].inbox.read
+            read: response.data[key].inbox.read,
           });
         }
       }
@@ -108,5 +106,33 @@ export const fetchRecievedMail = () => {
     };
     const data = await fetchData();
     dispatch(composeActions.fetchRecievedData(data));
+  };
+};
+
+export const deleteMessage = (id) => {
+  return async (dispatch) => {
+    const email = localStorage.getItem("email");
+    const mail = email.replace(/[^a-zA-Z0-9]/g, "");
+    const response = await axios.delete(
+      `https://mailbox-client-0574-default-rtdb.firebaseio.com/${mail}/${id}.json`
+    );
+    if (response.status === 200) {
+      console.log(response);
+      dispatch(composeActions.deleteInbox(id));
+    }
+  };
+};
+
+export const deleteSentMessage = (id) => {
+  return async (dispatch) => {
+    const email = localStorage.getItem("email");
+    const mail = email.replace(/[^a-zA-Z0-9]/g, "");
+    const response = await axios.delete(
+      `https://mailbox-client-0574-default-rtdb.firebaseio.com/${mail}/${id}.json`
+    );
+    if (response.status === 200) {
+      console.log(response);
+      dispatch(composeActions.deleteSentbox(id));
+    }
   };
 };

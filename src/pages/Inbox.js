@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { fetchRecievedMail } from "../store/compose-actions";
+import { deleteMessage, fetchRecievedMail } from "../store/compose-actions";
 const Inbox = () => {
   const recievedData = useSelector((state) => state.compose.recievedData);
   const dispatch = useDispatch();
@@ -11,11 +11,13 @@ const Inbox = () => {
   useEffect(() => {
     dispatch(fetchRecievedMail());
   }, [dispatch]);
-
+  const deleteMessageHandler = (id) => {
+    dispatch(deleteMessage(id));
+  };
   const recievedList = recievedData.map((data) => {
     console.log(data);
     const url = `/inbox/${data.message}`;
-    
+
     return (
       <div>
         <Container>
@@ -28,14 +30,18 @@ const Inbox = () => {
                 <div>From:{data.From}</div>
               </Col>
             </Link>
-            <Col>
+            <Col xs={3}>
               <div>Message:{data.message}</div>
             </Col>
-            {/* <Col>
-              <Button variant="danger" className="deletebtn">
+            <Col>
+              <Button
+                onClick={() => deleteMessageHandler(data.id)}
+                variant="danger"
+                className="deletebtn"
+              >
                 Delete
               </Button>
-            </Col> */}
+            </Col>
           </Row>
         </Container>
       </div>
