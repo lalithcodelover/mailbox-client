@@ -11,13 +11,14 @@ import SentMail from "./pages/SentMail";
 import { useDispatch } from "react-redux";
 import {  fetchRecievedMail, fetchSentMail } from "./store/compose-actions";
 import Inbox from "./pages/Inbox";
+import MessageBox from "./pages/MessageBox";
 
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchSentMail());
-    dispatch(fetchRecievedMail())
-  }, [dispatch]);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(fetchSentMail());
+  //   dispatch(fetchRecievedMail())
+  // }, [dispatch]);
   return (
     <Fragment>
       <Switch>
@@ -38,9 +39,13 @@ function App() {
           <Mailbox />
           <SentMail />
         </Route>
-        <Route path='/inbox'>
+        <Route path='/inbox' exact>
           <Mailbox/>
           <Inbox/>
+        </Route>
+        <Route path='/inbox/:email'>
+          <Mailbox/>
+          <MessageBox/>
         </Route>
       </Switch>
     </Fragment>

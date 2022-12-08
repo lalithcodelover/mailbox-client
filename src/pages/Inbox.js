@@ -1,26 +1,41 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Container, Button, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { fetchRecievedMail } from "../store/compose-actions";
 const Inbox = () => {
   const recievedData = useSelector((state) => state.compose.recievedData);
-
+  const dispatch = useDispatch();
   console.log(recievedData);
+
+  useEffect(() => {
+    dispatch(fetchRecievedMail());
+  }, [dispatch]);
+
   const recievedList = recievedData.map((data) => {
+    console.log(data);
+    const url = `/inbox/${data.message}`;
+    
     return (
       <div>
         <Container>
           <Row xs={3} className="bg-light border p-3">
-            <Col>
-              <div>From:{data.From}</div>
+            <Col xs={1}>
+              <div className={data.read ? "read" : "status"}></div>
             </Col>
+            <Link to={{ pathname: url, state: data }}>
+              <Col>
+                <div>From:{data.From}</div>
+              </Col>
+            </Link>
             <Col>
               <div>Message:{data.message}</div>
             </Col>
-            <Col>
+            {/* <Col>
               <Button variant="danger" className="deletebtn">
                 Delete
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </div>

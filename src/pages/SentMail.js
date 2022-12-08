@@ -1,10 +1,15 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import "./SentMail.css";
+import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { fetchSentMail } from "../store/compose-actions";
 const SentMail = () => {
   const sentData = useSelector((state) => state.compose.sentData);
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSentMail());
+  }, [dispatch]);
   console.log(sentData);
   const sentList = sentData.map((data) => {
     return (
@@ -17,11 +22,11 @@ const SentMail = () => {
             <Col>
               <div>Message:{data.message}</div>
             </Col>
-            <Col>
+            {/* <Col>
               <Button variant="danger" className="deletebtn">
                 Delete
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </div>
