@@ -10,9 +10,9 @@ const SentMail = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchSentMail());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchSentMail());
+  // }, [dispatch]);
 
   const deleteMessageHandler = (id) => {
     dispatch(deleteSentMessage(id));

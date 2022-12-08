@@ -16,9 +16,12 @@ import MessageBox from "./pages/MessageBox";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchSentMail());
-    dispatch(fetchRecievedMail());
+    setInterval(() => {
+      dispatch(fetchSentMail());
+      dispatch(fetchRecievedMail());
+    }, 2000);
   }, [dispatch]);
+  
   return (
     <Fragment>
       <Switch>

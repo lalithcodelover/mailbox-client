@@ -8,9 +8,9 @@ const Inbox = () => {
   const dispatch = useDispatch();
   console.log(recievedData);
 
-  useEffect(() => {
-    dispatch(fetchRecievedMail());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchRecievedMail());
+  // }, [dispatch]);
   const deleteMessageHandler = (id) => {
     dispatch(deleteMessage(id));
   };
